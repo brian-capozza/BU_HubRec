@@ -1,0 +1,22 @@
+<!-- templates/display_hub_classes.html -->
+<h1>{{ hub.get_unit_name_display }}</h1>
+<h2>Courses that satisfy this Hub:</h2>
+
+{% if courses %}
+    <ul>
+        {% for course in courses %}
+            <li>
+                <strong>{{ course.name }}</strong>
+                <br>
+                <em>{{ course.class_data.college }} {{ course.class_data.subject }} {{ course.class_data.catalog_number }}</em>
+                <br>
+                {{ course.description }}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No courses found for this hub.</p>
+{% endif %}
+
+<br>
+<a href="{% url 'Core:pick_hub' %}">Back to Hub List</a>
