@@ -278,7 +278,7 @@ class Course(models.Model):
 
     class_data = models.ForeignKey(ClassData, on_delete=models.CASCADE)
     hubs = models.ManyToManyField(Hub)
-    class_data = models.ManyToManyField(Professor)
+    professor = models.ManyToManyField(Professor)
 
     def __str__(self):
         hubs_list = ", ".join(str(h) for h in self.hubs.all())
