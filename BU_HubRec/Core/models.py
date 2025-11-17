@@ -244,6 +244,9 @@ SUBJECT_CHOICES = [
 class Hub(models.Model):
     unit_name = models.CharField(null=False, blank=False, choices=HUB_CHOICES, max_length=3, unique=True)
 
+    def __str__(self):
+        return self.unit_name
+
 class ClassData(models.Model):
     college = models.CharField(null=False, blank=False, choices=COLLEGE_CHOICES, max_length=3)
     subject = models.CharField(null=False, blank=False, choices=SUBJECT_CHOICES, max_length=2)
@@ -258,6 +261,9 @@ class ClassData(models.Model):
         ]
         verbose_name_plural = 'Class Data'
 
+    def __str__(self):
+        return f'{self.college} {self.subject}{self.catalog_number}'
+
 class Course(models.Model):
     name = models.CharField(null=False, blank=False, max_length=50)
     description = models.TextField(null=False, blank=False, default='')
@@ -265,6 +271,21 @@ class Course(models.Model):
 
     class_data = models.ForeignKey(ClassData, on_delete=models.CASCADE)
     hubs = models.ManyToManyField(Hub)
+
+    def __str__(self):
+        hubs_list = ", ".join(str(h) for h in self.hubs.all())
+        return (
+            f"Course Number: {self.class_data}\n"
+            f"Course Name: {self.name}\n"
+            f"Credits: {self.credits}\n"
+            f"Hubs Fulfilled: {hubs_list}\n"
+            f"Course Description: {self.description}"
+        )
+    
+
+class Professor(models.Model):
+    name = models.CharField(null=False, blank=False, max_length=50)
+    rating = models.IntegerField(null=False, blank=False, default=0)
 
     def __str__(self):
         return self.name
