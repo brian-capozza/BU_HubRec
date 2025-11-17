@@ -241,6 +241,13 @@ SUBJECT_CHOICES = [
     ("UC", "*UNKNOWN*")
 ]
 
+class Professor(models.Model):
+    name = models.CharField(null=False, blank=False, max_length=50)
+    rating = models.IntegerField(null=False, blank=False, default=0)
+
+    def __str__(self):
+        return self.name
+
 class Hub(models.Model):
     unit_name = models.CharField(null=False, blank=False, choices=HUB_CHOICES, max_length=3, unique=True)
 
@@ -271,6 +278,7 @@ class Course(models.Model):
 
     class_data = models.ForeignKey(ClassData, on_delete=models.CASCADE)
     hubs = models.ManyToManyField(Hub)
+    class_data = models.ManyToManyField(Professor)
 
     def __str__(self):
         hubs_list = ", ".join(str(h) for h in self.hubs.all())
@@ -281,11 +289,3 @@ class Course(models.Model):
             f"Hubs Fulfilled: {hubs_list}\n"
             f"Course Description: {self.description}"
         )
-    
-
-class Professor(models.Model):
-    name = models.CharField(null=False, blank=False, max_length=50)
-    rating = models.IntegerField(null=False, blank=False, default=0)
-
-    def __str__(self):
-        return self.name
