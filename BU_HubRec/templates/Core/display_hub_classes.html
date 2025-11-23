@@ -1,0 +1,80 @@
+<!-- templates/display_hub_classes.html -->
+
+{% extends 'partials/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/display_hub_classes.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+
+<div class="courses-container">
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+        <a href="{% url 'Core:pick_hub' %}" class="breadcrumb-link">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+            </svg>
+            Back to Hub List
+        </a>
+    </div>
+
+    <!-- Header -->
+    <div class="courses-header">
+        <div class="tag-box">
+            <div class="tag">Hub Courses</div>
+        </div>
+        <h1>{{ hub.get_unit_name_display }}</h1>
+        <p class="subtitle">Browse all courses that satisfy this Hub requirement</p>
+    </div>
+
+    <!-- Courses List -->
+    {% if courses %}
+        <div class="courses-count">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+            </svg>
+            <span>{{ courses|length }} course{{ courses|length|pluralize }} available</span>
+        </div>
+
+        <ul class="courses-grid">
+            {% for course in courses %}
+                <li class="course-card" style="--index: {{ forloop.counter0 }}">
+                    <div class="course-header">
+                        <div class="course-code">
+                            {{ course.class_data.college }} {{ course.class_data.subject }} {{ course.class_data.catalog_number }}
+                        </div>
+                        <div class="course-badge">
+                            <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="course-name">{{ course.name }}</h3>
+                    <p class="course-description">{{ course.description|truncatewords:30 }}</p>
+                    
+                    <div class="course-footer">
+                        <a class="btn-details"
+                            href="{% url 'Core:display_course_information' course.class_data.college course.class_data.subject course.class_data.catalog_number %}">
+                            View Details
+                        </a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <div class="empty-state">
+            <div class="empty-icon">
+                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                </svg>
+            </div>
+            <h3>No Courses Found</h3>
+            <p>There are currently no courses available for this hub.</p>
+            <a href="{% url 'Core:pick_hub' %}" class="btn-back">Browse Other Hubs</a>
+        </div>
+    {% endif %}
+</div>
+
+{% endblock content %}

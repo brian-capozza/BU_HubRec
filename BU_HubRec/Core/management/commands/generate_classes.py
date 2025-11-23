@@ -1,7 +1,10 @@
 from django.core.management.base import BaseCommand
 from bs4 import BeautifulSoup
 import requests
-from Core.models import Hub, ClassData, Course, HUB_CHOICES
+from Core.models import Hub, ClassData, Course, Offered, HUB_CHOICES
+import re
+
+from typing import overload, Literal
 
 HUB_LABEL_TO_CODE = {label: code for code, label in HUB_CHOICES}
 
@@ -31,8 +34,27 @@ urls = [
     "https://www.bu.edu/hub/hub-courses/creativity-innovation/"
 ]
 
+def parse_terms(text: str) -> list[str]:
+    # Replace "and" with comma, then split on commas/whitespace
+    cleaned = re.sub(r"\band\b", ",", text, flags=re.IGNORECASE)
+    parts = re.split(r"[,\s]+", cleaned)
+    # Filter blank entries and enforce title case
+    return [p.title() for p in parts if p]
 
-def get_current_db_content(pick):
+@overload
+def get_current_db_content(pick: str) -> dict: ...
+
+@overload
+def get_current_db_content(pick: Literal["hub"]) -> dict[str, Hub]: ...
+
+@overload
+def get_current_db_content(pick: Literal["classdata"]) -> dict[tuple[str, str, str], ClassData]: ...
+
+@overload
+def get_current_db_content(pick: Literal["course"]) -> dict[tuple[str, str, str], Course]: ...
+
+
+def get_current_db_content(pick) -> dict[str, Hub] | dict[tuple[str, str, str], ClassData] | dict[tuple[str, str, str], Course] | dict:
     if pick == 'hub':
         # Get all hubs once so we don't hit DB repeatedly
         return {h.unit_name: h for h in Hub.objects.all()}
@@ -64,6 +86,7 @@ def hub_parser(url):
 
     updates = []  # Courses whose fields need updating
     hub_updates = {}  # map Course → list of hub_codes
+    offered_updates = {}
 
     for course in courses:
         id = course.find('span', 'cf-course-id').text
@@ -99,7 +122,13 @@ def hub_parser(url):
         credits = course.find('span', 'cf-course-credits').text.split()[0]
         prereqs = course.find('span', 'cf-course-prereqs').text
         offered = course.find('span', 'cf-course-offered').text
+        # print(offered) #Fall, Spring, Summer Fall and Spring
         description = course.find('p', 'cf-course-description').text
+
+        offered_updates[key] = parse_terms(offered)
+        if catalog_number[-1] == 'S':
+            offered_updates[key].append('Summer')
+
 
         hub_units = []
         hub_list = course.find('ul', 'cf-hub-offerings')
@@ -156,6 +185,11 @@ def hub_parser(url):
         course_obj = course_map[key]
         valid_hubs = Hub.objects.filter(unit_name__in=hub_codes)
         course_obj.hubs.set(valid_hubs)
+
+    for key, offered_codes in offered_updates.items():
+        course_obj = course_map[key]
+        valid_sems = Offered.objects.filter(semester_offered__in=offered_codes)
+        course_obj.offered.set(valid_sems)
 
     #span.cf-course-id
     #span.cf-course-credits

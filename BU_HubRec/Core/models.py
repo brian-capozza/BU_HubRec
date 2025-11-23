@@ -1,5 +1,11 @@
 from django.db import models
 
+OFFERED_CHOICES = [
+    ("Spring", "Spring"),
+    ("Fall", "Fall"),
+    ("Summer", "Summer")
+]
+
 HUB_CHOICES = [
     ("PLM", "Philosophical Inquiry and Life's Meanings"),
     ("AEX", "Aesthetic Exploration"),
@@ -238,7 +244,7 @@ SUBJECT_CHOICES = [
     ("BO", "Cross-Reg Boston College"),
     ("HC", "Cross-Reg Hebrew College"),
     ("TF", "Cross-Reg Tufts Univ"),
-    ("UC", "*UNKNOWN*")
+    ("UC", "University Credit")
 ]
 
 class Professor(models.Model):
@@ -253,6 +259,15 @@ class Hub(models.Model):
 
     def __str__(self):
         return self.unit_name
+    
+class Offered(models.Model):
+    semester_offered = models.CharField(choices=OFFERED_CHOICES, max_length=10, unique=True)
+
+    def __str__(self):
+        return self.semester_offered
+    
+    class Meta:
+        verbose_name_plural = 'Semesters Offered'
 
 class ClassData(models.Model):
     college = models.CharField(null=False, blank=False, choices=COLLEGE_CHOICES, max_length=3)
@@ -274,18 +289,22 @@ class ClassData(models.Model):
 class Course(models.Model):
     name = models.CharField(null=False, blank=False, max_length=50)
     description = models.TextField(null=False, blank=False, default='')
-    credits = models.CharField(null=False, blank=True, max_length=10, default=4)
+    credits = models.CharField(null=False, blank=True, max_length=10, default='4')
+    offered_next_semester = models.BooleanField(default=False)
 
     class_data = models.ForeignKey(ClassData, on_delete=models.CASCADE)
     hubs = models.ManyToManyField(Hub)
+    offered = models.ManyToManyField(Offered)
     professor = models.ManyToManyField(Professor)
 
     def __str__(self):
         hubs_list = ", ".join(str(h) for h in self.hubs.all())
+        offered_list = ", ".join(str(o) for o in self.offered.all())
         return (
             f"Course Number: {self.class_data}\n"
             f"Course Name: {self.name}\n"
             f"Credits: {self.credits}\n"
             f"Hubs Fulfilled: {hubs_list}\n"
-            f"Course Description: {self.description}"
+            f"Course Description: {self.description}\n"
+            f"Course Offered: {offered_list}"
         )

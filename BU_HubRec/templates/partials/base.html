@@ -1,0 +1,48 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HubOptimizer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Prata&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/global.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/main-navbar.css' %}">
+    {% block extra_css %}{% endblock extra_css %}
+    {% block extra_js %}{% endblock extra_js %}
+    <script src="{% static '//js/script.js' %}"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.149.0/examples/js/controls/TrackballControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.149.0/examples/js/loaders/FontLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.149.0/examples/js/geometries/TextGeometry.js"></script>
+
+
+</head>
+
+<header>
+    <nav class="main-navbar">
+        <div class="logo-section">
+            <a href="/"><img src="{% static 'images/bu-logo.png' %}" class="logo" alt=""></a>
+        </div>
+        <div class="title-section">
+             <a href="/">• Boston University | Hub Optimizer •</a>
+        </div>
+        <ul class="main-navbar-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/hubs/">Catalog</a></li>
+            <li><a href="/wizard/">Optimizer</a></li>
+        </ul>
+
+    </nav>
+</header>
+
+<body>
+    {% block content %}
+
+    {% endblock content %}
+</body>
+
+</html>

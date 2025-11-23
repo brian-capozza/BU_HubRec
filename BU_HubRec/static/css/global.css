@@ -1,0 +1,16 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Inter", sans-serif;
+    background-color: #F6EEE3;
+}
+
+/* Headings use Prata */
+header {
+    font-family: "Prata", serif;
+    font-weight: 400; /* Prata only has 400 weight */
+}

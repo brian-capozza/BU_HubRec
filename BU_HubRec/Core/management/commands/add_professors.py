@@ -1,8 +1,6 @@
 from django.core.management.base import BaseCommand
 
 import re
-import time
-import csv
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
@@ -11,6 +9,10 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from django.db import transaction
 from Core.models import Professor, ClassData, Course
+from webdriver_manager.chrome import ChromeDriverManager
+
+service = Service(ChromeDriverManager().install())
+driver = webdriver.Chrome(service=service)
 
 def normalize_prof_names(prof_field):
     if not prof_field:
@@ -75,6 +77,16 @@ def attach_profs_to_existing_courses(all_courses_data, verbose=True):
         if not course:
             # fallback: if strict name match fails, try any course for that classdata
             course = Course.objects.filter(class_data=classdata).first()
+        # Explicit None check so Pylance is satisfied
+        if course is None:
+            if verbose:
+                print(f"No Course found for {classdata}; skipped")
+            skipped += 1
+            continue
+        # Mark course as offered next semester
+        if not course.offered_next_semester:
+            course.offered_next_semester = True
+            course.save(update_fields=['offered_next_semester'])
         if not course:
             if verbose:
                 print(f"No Course found for {classdata}; skipped")
@@ -101,13 +113,16 @@ def attach_profs_to_existing_courses(all_courses_data, verbose=True):
 
 
 def process_professors():
+    # Reset offered_next_semester for all courses
+    print("Resetting offered_next_semester flags...")
+    Course.objects.update(offered_next_semester=False)
 
     # --------------------------
     # 1️⃣ Setup Chrome driver
     # --------------------------
-    driver_path = r"C:\Users\evanj\OneDrive\Desktop\CourseScraper\chromedriver-win64\chromedriver.exe"
-    service = Service(driver_path)
-    driver = webdriver.Chrome(service=service)
+    #driver_path = r"C:\Users\evanj\OneDrive\Desktop\CourseScraper\chromedriver-win64\chromedriver.exe"
+    #service = Service(driver_path)
+    #driver = webdriver.Chrome(service=service)
     # Set up a 20-second wait (increased from 10)
     wait = WebDriverWait(driver, 20) 
 

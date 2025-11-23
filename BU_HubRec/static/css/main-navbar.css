@@ -1,0 +1,139 @@
+.main-navbar {
+    position: sticky;
+    height: 15vh;
+    width: 100%;
+    top: 0;
+    overflow: hidden;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.logo-section {
+    width: 15%;
+}
+
+.logo {
+    width: 100%;
+    height: auto;
+    max-width: 100px; /* adjust to the max size you want */
+}
+
+.title-section {
+    font-size: 22px;
+    width: 45%;
+}
+
+.title-section a {
+    cursor: progress;
+    text-decoration: none;
+    color: #b61c1c; /* For Example */
+}
+
+.main-navbar-links {
+    width: 40%;
+    justify-content: right;
+    margin-right: 50px;
+    list-style: none;
+    display: flex;
+    gap: 30px;
+}
+
+.main-navbar-links li a {
+    display: inline-block;
+    position: relative;
+    text-decoration: none;
+    color: black;
+    padding-bottom: 4px;
+    font-size: 15px;
+    opacity: 0;
+    animation: slideInFromTop 0.5s ease forwards;
+}
+
+.main-navbar-links li a:hover {
+    color: #bd0e02;
+}
+
+/* sliding underline */
+.main-navbar-links li a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    width: 0;
+    background: #bd0e02;        /* underline color */
+    transition: width 0.25s ease;
+}
+
+/* expand underline on hover */
+.main-navbar-links li a:hover::after {
+    width: 80%;
+}
+
+.main-navbar-links li:nth-child(1) a {
+    animation-delay: 0.2s;
+}
+.main-navbar-links li:nth-child(2) a {
+    animation-delay: 0.4s;
+}
+.main-navbar-links li:nth-child(3) a {
+    animation-delay: 0.6s;
+}
+
+
+@keyframes slideInFromTop {
+    0% {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 1000px) {
+    .title-section {
+        font-size: 18px;
+    }
+}
+
+
+@media (max-width: 800px) {
+    .logo-section {
+        display: none;
+    }
+
+    .title-section {
+        font-size: 16px;
+        width: 60%;
+    }
+
+    .main-navbar-links {
+        width: 40%;
+        margin-right: 30px;
+        gap: 20px;
+    }
+
+    .main-navbar-links li a {
+        font-size: 14px;
+    }
+}
+
+
+@media (max-width: 600px) {
+    .title-section {
+        font-size: 14px;
+    }
+
+    .main-navbar-links {
+        margin-right: 20px;
+    }
+
+    .main-navbar-links li a {
+        font-size: 11px;
+    }
+}

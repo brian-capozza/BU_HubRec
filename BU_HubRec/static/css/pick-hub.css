@@ -1,0 +1,252 @@
+/* static/css/pick_hub.css */
+
+/* Container */
+.hub-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+    animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Header Section */
+.hub-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.tag-box {
+    cursor: default;
+    display: inline-block;
+    position: relative;
+    width: 18rem;
+    height: 4rem;
+    font-size: 18px;
+    border-radius: 30px;
+    background: linear-gradient(to right, #656565, #ff2314, #e81305, #bd0e02, #757575, #656565);
+    background-size: 200%;
+    animation: animationGradient 2.5s linear infinite;
+    margin-bottom: 1.5rem;
+}
+
+@keyframes animationGradient {
+    to {
+        background-position: 200%;
+    }
+}
+
+.tag-box .tag {
+    background-color: #F6EEE3;
+    position: absolute;
+    inset: 3px;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    transition: 0.3s ease;
+}
+
+.hub-header h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+}
+
+.subtitle {
+    font-size: 1.1rem;
+    color: #656565;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Hub Grid */
+.hub-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+    list-style: none;
+    margin-top: 2rem;
+}
+
+/* Hub Card */
+.hub-card {
+    position: relative;
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    animation: scaleIn 0.6s ease-out both;
+    animation-delay: calc(var(--index) * 0.1s);
+    overflow: hidden;
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.hub-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #bd0e02, #ff2314);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.hub-card:hover::before {
+    transform: scaleX(1);
+}
+
+.hub-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 40px rgba(189, 14, 2, 0.15);
+}
+
+.hub-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+/* Hub Icon */
+.hub-icon {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, rgba(189, 14, 2, 0.1) 0%, rgba(189, 14, 2, 0.05) 100%);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.hub-card:hover .hub-icon {
+    background: linear-gradient(135deg, #bd0e02 0%, #ff2314 100%);
+    transform: rotate(5deg) scale(1.1);
+}
+
+.hub-icon svg {
+    width: 24px;
+    height: 24px;
+    stroke: #bd0e02;
+    transition: stroke 0.3s ease;
+}
+
+.hub-card:hover .hub-icon svg {
+    stroke: white;
+}
+
+/* Hub Content */
+.hub-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.01em;
+}
+
+.hub-description {
+    font-size: 0.9rem;
+    color: #656565;
+    line-height: 1.6;
+}
+
+/* Hub Arrow */
+.hub-arrow {
+    position: absolute;
+    right: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.hub-card:hover .hub-arrow {
+    opacity: 1;
+    transform: translateY(-50%) translateX(5px);
+}
+
+.hub-arrow svg {
+    width: 24px;
+    height: 24px;
+    stroke: #bd0e02;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .hub-container {
+        padding: 2rem 1rem;
+    }
+
+    .hub-header h1 {
+        font-size: 2rem;
+    }
+
+    .subtitle {
+        font-size: 1rem;
+    }
+
+    .hub-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .hub-card {
+        padding: 1.5rem;
+    }
+
+    .hub-arrow {
+        display: none;
+    }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

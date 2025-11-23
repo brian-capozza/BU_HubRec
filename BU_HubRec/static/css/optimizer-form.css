@@ -1,0 +1,589 @@
+/* static/css/optimizer-form.css */
+
+/* Container */
+.form-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem 2rem 4rem;
+    animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Progress Bar */
+.progress-wrapper {
+    margin-bottom: 3rem;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.progress-bar {
+    height: 6px;
+    background: rgba(189, 14, 2, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 2rem;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #bd0e02, #ff2314);
+    border-radius: 10px;
+    width: calc((var(--progress) / 3) * 100%);
+    transition: width 0.5s ease;
+}
+
+.progress-steps {
+    display: flex;
+    justify-content: space-between;
+}
+
+.progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    flex: 1;
+    opacity: 0.4;
+    transition: opacity 0.3s ease;
+}
+
+.progress-step.active {
+    opacity: 1;
+}
+
+.step-circle {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(189, 14, 2, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: #bd0e02;
+    transition: all 0.3s ease;
+}
+
+.progress-step.active .step-circle {
+    background: linear-gradient(135deg, #bd0e02, #ff2314);
+    color: white;
+    box-shadow: 0 4px 15px rgba(189, 14, 2, 0.3);
+    transform: scale(1.1);
+}
+
+.progress-step.completed .step-circle {
+    background: linear-gradient(135deg, #2e7d32, #43a047);
+    color: white;
+}
+
+.step-circle svg {
+    width: 24px;
+    height: 24px;
+    stroke: currentColor;
+}
+
+.step-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #656565;
+    text-align: center;
+}
+
+.progress-step.active .step-label {
+    color: #bd0e02;
+}
+
+/* Form Card */
+.form-card {
+    background: white;
+    border-radius: 20px;
+    padding: 3rem;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    animation: scaleIn 0.8s ease-out 0.2s both;
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Form Header */
+.form-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.form-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 1.5rem;
+    background: linear-gradient(135deg, rgba(189, 14, 2, 0.1), rgba(189, 14, 2, 0.05));
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.form-icon svg {
+    width: 32px;
+    height: 32px;
+    stroke: #bd0e02;
+}
+
+.form-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+}
+
+.form-subtitle {
+    font-size: 1rem;
+    color: #656565;
+}
+
+/* Form Content */
+.form-content {
+    margin-bottom: 2.5rem;
+}
+
+/* Step 1: Hub Selection */
+.hub-selection {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+}
+
+.hub-checkbox-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.hub-checkbox-input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.hub-checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem;
+    background: linear-gradient(135deg, rgba(189, 14, 2, 0.03), rgba(189, 14, 2, 0.01));
+    border: 2px solid rgba(189, 14, 2, 0.1);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.hub-checkbox-label:hover {
+    background: linear-gradient(135deg, rgba(189, 14, 2, 0.08), rgba(189, 14, 2, 0.04));
+    border-color: rgba(189, 14, 2, 0.3);
+    transform: translateY(-2px);
+}
+
+.hub-checkbox-input:checked + .hub-checkbox-label {
+    background: linear-gradient(135deg, #bd0e02, #ff2314);
+    border-color: #bd0e02;
+    color: white;
+    box-shadow: 0 4px 15px rgba(189, 14, 2, 0.3);
+}
+
+.checkbox-icon {
+    width: 28px;
+    height: 28px;
+    border: 2px solid rgba(189, 14, 2, 0.3);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+}
+
+.hub-checkbox-input:checked + .hub-checkbox-label .checkbox-icon {
+    background: white;
+    border-color: white;
+}
+
+.checkbox-icon svg {
+    width: 18px;
+    height: 18px;
+    stroke: transparent;
+    transition: stroke 0.3s ease;
+}
+
+.hub-checkbox-input:checked + .hub-checkbox-label .checkbox-icon svg {
+    stroke: #bd0e02;
+}
+
+.checkbox-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.checkbox-title {
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.checkbox-code {
+    font-size: 0.8rem;
+    font-weight: 500;
+    opacity: 0.8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Hub Count Input */
+.hub-count-wrapper {
+    display: none;
+    background: linear-gradient(135deg, rgba(189, 14, 2, 0.05), rgba(189, 14, 2, 0.02));
+    border: 2px solid rgba(189, 14, 2, 0.15);
+    border-radius: 12px;
+    padding: 1rem;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hub-checkbox-input:checked ~ .hub-count-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.count-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #bd0e02;
+}
+
+.count-label svg {
+    width: 16px;
+    height: 16px;
+    stroke: currentColor;
+}
+
+.count-input {
+    padding: 0.6rem 0.9rem;
+    border: 2px solid rgba(189, 14, 2, 0.2);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-align: center;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.count-input:focus {
+    outline: none;
+    border-color: #bd0e02;
+    box-shadow: 0 0 0 3px rgba(189, 14, 2, 0.1);
+}
+
+/* Step 2: Preferences Form */
+.preferences-form {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.form-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    font-size: 0.95rem;
+}
+
+.form-label svg {
+    width: 20px;
+    height: 20px;
+    stroke: #bd0e02;
+    flex-shrink: 0;
+}
+
+.form-input {
+    padding: 0.9rem 1.25rem;
+    border: 2px solid rgba(189, 14, 2, 0.15);
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #bd0e02;
+    box-shadow: 0 0 0 4px rgba(189, 14, 2, 0.1);
+}
+
+.form-input::placeholder {
+    color: #aaa;
+}
+
+.form-help {
+    font-size: 0.85rem;
+    color: #888;
+}
+
+.form-error {
+    font-size: 0.85rem;
+    color: #d32f2f;
+    font-weight: 500;
+}
+
+/* Toggle Switch */
+.toggle-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: linear-gradient(135deg, rgba(189, 14, 2, 0.05), rgba(189, 14, 2, 0.02));
+    border-radius: 12px;
+}
+
+.toggle-input {
+    display: none;
+}
+
+.toggle-label {
+    position: relative;
+    width: 52px;
+    height: 28px;
+    background: #ddd;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    flex-shrink: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 22px;
+    height: 22px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-input:checked + .toggle-label {
+    background: linear-gradient(135deg, #bd0e02, #ff2314);
+}
+
+.toggle-input:checked + .toggle-label .toggle-slider {
+    transform: translateX(24px);
+}
+
+.toggle-text {
+    font-size: 0.95rem;
+    color: #444;
+    font-weight: 500;
+}
+
+/* Step 3: Interests Form */
+.interests-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-textarea {
+    padding: 1rem 1.25rem;
+    border: 2px solid rgba(189, 14, 2, 0.15);
+    border-radius: 12px;
+    font-size: 1rem;
+    font-family: inherit;
+    resize: vertical;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.form-textarea:focus {
+    outline: none;
+    border-color: #bd0e02;
+    box-shadow: 0 0 0 4px rgba(189, 14, 2, 0.1);
+}
+
+.form-textarea::placeholder {
+    color: #aaa;
+}
+
+/* Form Actions */
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: 2rem;
+    border-top: 2px solid rgba(189, 14, 2, 0.1);
+}
+
+.btn-back,
+.btn-next {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.9rem 2rem;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.btn-back {
+    background: transparent;
+    color: #bd0e02;
+    border: 2px solid rgba(189, 14, 2, 0.3);
+}
+
+.btn-back:hover {
+    background: rgba(189, 14, 2, 0.05);
+    border-color: rgba(189, 14, 2, 0.5);
+}
+
+.btn-back svg {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+}
+
+.btn-next {
+    background: linear-gradient(135deg, #bd0e02, #ff2314);
+    color: white;
+    box-shadow: 0 4px 15px rgba(189, 14, 2, 0.3);
+    margin-left: auto;
+}
+
+.btn-next:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(189, 14, 2, 0.4);
+}
+
+.btn-next:active {
+    transform: translateY(0);
+}
+
+.btn-next svg {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .form-container {
+        padding: 1.5rem 1rem 3rem;
+    }
+
+    .form-card {
+        padding: 2rem 1.5rem;
+    }
+
+    .form-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .form-subtitle {
+        font-size: 0.9rem;
+    }
+
+    .hub-selection {
+        grid-template-columns: 1fr;
+    }
+
+    .progress-steps {
+        gap: 0.5rem;
+    }
+
+    .step-circle {
+        width: 40px;
+        height: 40px;
+    }
+
+    .step-label {
+        font-size: 0.75rem;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .btn-back,
+    .btn-next {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .btn-next {
+        order: -1;
+        margin-left: 0;
+    }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

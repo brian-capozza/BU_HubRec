@@ -1,10 +1,13 @@
 from django.contrib import admin
-from Core.models import Course, Hub, ClassData
+from Core.models import Course, Hub, ClassData, Offered
 
 # Register your models here.
 
 class HubAdmin(admin.ModelAdmin):
     list_display = ("unit_name",)
+
+class OfferedAdmin(admin.ModelAdmin):
+    list_display = ("semester_offered",)
 
 class ClassDataAdmin(admin.ModelAdmin):
     list_display = ("college", "subject", "catalog_number")
@@ -28,3 +31,4 @@ class CourseAdmin(admin.ModelAdmin):
 admin.site.register(Course, CourseAdmin)
 admin.site.register(ClassData, ClassDataAdmin)
 admin.site.register(Hub, HubAdmin)
+admin.site.register(Offered, OfferedAdmin)

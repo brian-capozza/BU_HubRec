@@ -1,0 +1,369 @@
+.hero-section {
+    display: flex;
+    width: 100%;
+    height: 85vh;
+}
+
+.hero-left {
+    flex: 1; /* 50% */
+    display: flex;
+    align-items: center;
+}
+
+.hero-right {
+    flex: 1; /* 50% */
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: calc(90vh - 6rem);
+}
+
+.hero-wrapper {
+    max-width: 25rem;
+    margin-left: 10%;
+    z-index: 999;
+}
+
+/* Keyframe Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes animationGradient {
+    to {
+        background-position: 200%;
+    }
+}
+
+.hero-wrapper h1 {
+    font-size: 2.2rem;
+    font-weight: 600;
+    letter-spacing: 0.1rem;
+    margin: 2rem 0;
+    line-height: 1.2;
+    text-shadow: 0 0 10px rgba(128, 128, 128, 0.418);
+    animation: fadeInLeft 0.8s ease-out 0.2s both;
+}
+
+.description {
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    max-width: 35rem;
+    color: #656565;
+    animation: fadeInLeft 0.8s ease-out 0.4s both;
+}
+
+.buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 3rem;
+    animation: fadeInUp 0.8s ease-out 0.6s both;
+}
+
+/* Primary CTA - Optimizer (dominant action) */
+.btn-optimizer {
+    text-decoration: none;
+    background: #bd0e02;
+    border: none;
+    padding: 0.6rem 1.5rem;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: #ffffff;
+    box-shadow: 0 2px 12px rgba(189, 14, 2, 0.25);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    line-height: 1.4;
+    text-align: center;
+}
+
+.btn-optimizer:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(189, 14, 2, 0.35);
+    background: #d10f02;
+}
+
+.btn-optimizer:active {
+    transform: translateY(0);
+}
+
+/* Secondary CTA - Catalog (supportive action) */
+.btn-catalog {
+    text-decoration: none;
+    background: transparent;
+    border: 1.5px solid rgba(189, 14, 2, 0.3);
+    padding: 0.6rem 1.5rem;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: #bd0e02;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    line-height: 1.4;
+    text-align: center;
+}
+
+.btn-catalog:hover {
+    background: rgba(189, 14, 2, 0.05);
+    border-color: rgba(189, 14, 2, 0.5);
+    transform: translateY(-1px);
+}
+
+.btn-catalog:active {
+    transform: scale(0.98);
+}
+
+.three-model {
+    margin-right: 10%;
+    margin-bottom: 3%;
+    border-radius: 50%;
+    -webkit-mask-image: radial-gradient(circle, black 60%, transparent 100%);
+    mask-image: radial-gradient(circle, black 60%, transparent 100%);
+    backdrop-filter: blur(8px);
+    width: 100%;
+    height: 100%;
+    /* Force redraw on resize */
+    will-change: transform;
+    animation: scaleIn 1s ease-out 0.3s both, float 6s ease-in-out 1.5s infinite;
+}
+
+#wordcloud-root {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    /* Force redraw on resize */
+    contain: layout size;
+}
+
+/* Tablet/medium screens - keep side by side but adjust proportions */
+@media (max-width: 1024px) and (min-width: 769px) {
+    .hero-wrapper {
+        max-width: 22rem;
+        margin-left: 5%;
+    }
+    
+    .hero-wrapper h1 {
+        font-size: 2rem;
+    }
+    
+    .description {
+        font-size: 0.75rem;
+    }
+    
+    .three-model {
+        margin-right: 5%;
+    }
+}
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+    .hero-section {
+        flex-direction: column;
+        height: auto;
+        min-height: 100vh;
+        padding: 0;
+        gap: 0;
+    }
+
+    .hero-left {
+        flex: none;
+        width: 100%;
+        padding: 2rem 1.5rem 1.5rem;
+        display: flex;
+        justify-content: center;
+        min-height: 45vh;
+    }
+
+    .hero-wrapper {
+        max-width: 90%;
+        width: 100%;
+        margin-left: 0;
+        text-align: left;
+    }
+
+    .hero-wrapper h1 {
+        font-size: 2rem;
+        line-height: 1.2;
+        text-align: left;
+        margin: 1.5rem 0;
+    }
+
+    .description {
+        font-size: 0.95rem;
+        line-height: 1.6;
+        max-width: 100%;
+        text-align: left;
+    }
+
+    .buttons {
+        flex-direction: column;
+        width: 100%;
+        gap: 0.75rem;
+        margin-top: 2rem;
+    }
+
+    .btn-optimizer,
+    .btn-catalog {
+        width: 100%;
+        padding: 0.75rem 1.5rem;
+    }
+
+    .hero-right {
+        flex: none;
+        width: 100vw;
+        height: 55vh;
+        min-height: 400px;
+        max-height: 600px;
+        padding: 2rem 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+        overflow: visible;
+    }
+
+    .three-model {
+        margin: 0 auto;
+        width: 85vw;
+        height: 90%;
+        max-width: 500px;
+        max-height: 500px;
+        min-width: 300px;
+        min-height: 300px;
+        position: relative;
+        animation: scaleIn 0.8s ease-out 0.2s both, float 6s ease-in-out 1.2s infinite;
+    }
+
+    #wordcloud-root {
+        width: 100% !important;
+        height: 100% !important;
+        min-width: 300px !important;
+        min-height: 300px !important;
+        position: relative !important;
+    }
+
+    #wordcloud-root canvas {
+        width: 100% !important;
+        height: 100% !important;
+        min-width: 300px !important;
+        min-height: 300px !important;
+        max-width: 100% !important;
+        max-height: 100% !important;
+        margin: 0 auto !important;
+        display: block !important;
+        position: relative !important;
+    }
+}
+
+/* Very small screens */
+@media (max-width: 480px) {
+    .hero-left {
+        padding: 1.5rem 1rem 1rem;
+        min-height: 40vh;
+    }
+
+    .hero-wrapper {
+        max-width: 95%;
+    }
+
+    .hero-wrapper h1 {
+        font-size: 1.75rem;
+    }
+
+    .description {
+        font-size: 0.9rem;
+    }
+
+    .btn-optimizer,
+    .btn-catalog {
+        font-size: 0.85rem;
+        padding: 0.7rem 1.25rem;
+    }
+
+    .hero-right {
+        height: 50vh;
+        min-height: 350px;
+        max-height: 500px;
+        padding: 1.5rem 0;
+    }
+
+    .three-model {
+        width: 80vw;
+        height: 85%;
+        max-width: 380px;
+        max-height: 380px;
+        min-width: 280px;
+        min-height: 280px;
+    }
+
+    #wordcloud-root,
+    #wordcloud-root canvas {
+        min-width: 280px !important;
+        min-height: 280px !important;
+    }
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
