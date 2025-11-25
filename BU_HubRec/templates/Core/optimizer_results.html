@@ -8,16 +8,14 @@
 {% block content %}
 
 <div class="results-container">
-    <!-- Header -->
     <div class="results-header">
         <div class="tag-box">
             <div class="tag">Your Schedule</div>
         </div>
         <h1>Optimized Course Recommendations</h1>
-        <p class="subtitle">Based on your preferences and requirements</p>
+        <p class="subtitle">Based on your preferences and requirements. Optimized for **Fewest Courses** then **Fewest Credits**.</p>
     </div>
 
-    <!-- Summary Cards -->
     <div class="summary-grid">
         <div class="summary-card">
             <div class="summary-icon">
@@ -50,7 +48,7 @@
                 </svg>
             </div>
             <div class="summary-content">
-                <div class="summary-label">Credits Needed</div>
+                <div class="summary-label">Target Credits</div>
                 <div class="summary-value">{{ credits }}</div>
             </div>
         </div>
@@ -63,14 +61,58 @@
                 </svg>
             </div>
             <div class="summary-content">
-                <div class="summary-label">Number of Courses</div>
+                <div class="summary-label">Max Courses Limit</div>
                 <div class="summary-value">{{ num_courses }}</div>
             </div>
         </div>
         {% endif %}
     </div>
 
-    <!-- Selected Hubs Detail -->
+    <section class="content-section">
+        <div class="section-header">
+            <div class="section-icon">
+                <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125l2.25 2.25m0 0l2.25 2.25M5.25 15.375l2.25-2.25m0 0l2.25-2.25M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-7.5-6.75H14c.414 0 .75.336.75.75v10.5c0 .414-.336.75-.75.75h-2.5V17m-1.5-6h2m-2-3h2.5V8.25h-2.5c-.414 0-.75.336-.75.75V11z" />
+                </svg>
+            </div>
+            <h2>Top {{ schedule|length }} Optimized Paths</h2>
+        </div>
+
+        {% if schedule %}
+            {% for path in schedule %}
+                <div class="result-card">
+                    <div class="result-header">
+                        <span class="path-title">Path #{{ forloop.counter }}</span>
+                        <div class="path-stats">
+                            <span class="stat-badge stat-course">{{ path.num_courses }} Courses</span>
+                            <span class="stat-badge stat-credit">{{ path.total_credits }} Credits</span>
+                        </div>
+                    </div>
+
+                    <ul class="course-list">
+                        {% for course in path.courses %}
+                            <li class="course-item">
+                                <div class="course-code">{{ course.class_data }}</div>
+                                <div class="course-details">
+                                    <span class="course-name">{{ course.name }}</span>
+                                    <span class="course-credits">({{ course.credits }} cr.)</span>
+                                </div>
+                                <div class="course-hubs">
+                                    {% for hub in course.hubs.all %}
+                                        <span class="hub-tag">{{ hub.unit_name }}</span>
+                                    {% endfor %}
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="alert alert-warning">
+                No course paths were found that satisfy all your Hub requirements. Try adjusting your constraints!
+            </div>
+        {% endif %}
+    </section>
     {% if selected_hubs %}
     <section class="content-section">
         <div class="section-header">
@@ -96,7 +138,6 @@
     </section>
     {% endif %}
 
-    <!-- Preferences -->
     <section class="content-section">
         <div class="section-header">
             <div class="section-icon">
@@ -112,27 +153,30 @@
                 <span class="preference-label">Semester Filter:</span>
                 <span class="preference-value">
                     {% if only_next_semester %}
-                        <span class="badge badge-active">Next Semester Only</span>
+                        <span class="badge badge-active">Next Semester Only (Filter Disabled in Current Optimizer)</span>
                     {% else %}
-                        <span class="badge">All Semesters</span>
+                        <span class="badge">All Semesters (Used)</span>
                     {% endif %}
                 </span>
             </div>
             {% if num_courses %}
             <div class="preference-item">
                 <span class="preference-label">Preferred Course Count:</span>
-                <span class="preference-value">{{ num_courses }} courses</span>
+                <span class="preference-value">{{ num_courses }} courses (Max Constraint)</span>
             </div>
             {% else %}
             <div class="preference-item">
-                <span class="preference-label">Course Count:</span>
-                <span class="preference-value">Minimum needed</span>
+                <span class="preference-label">Course Count Goal:</span>
+                <span class="preference-value">Minimize Courses</span>
             </div>
             {% endif %}
+            <div class="preference-item">
+                <span class="preference-label">Secondary Goal:</span>
+                <span class="preference-value">Minimize Credits</span>
+            </div>
         </div>
     </section>
 
-    <!-- Interests -->
     {% if interests %}
     <section class="content-section">
         <div class="section-header">
@@ -143,11 +187,11 @@
             </div>
             <h2>Your Interests</h2>
         </div>
-        <p class="interests-text">{{ interests }}</p>
+        <p class="interests-text">"{{ interests }}"</p>
+        <p class="note">Note: This information is currently **not** used by the optimization algorithm.</p>
     </section>
     {% endif %}
 
-    <!-- Action Buttons -->
     <div class="action-buttons">
         <a href="{% url 'Core:optimizer' %}" class="btn-secondary">
             <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
@@ -155,22 +199,19 @@
             </svg>
             Start Over
         </a>
-        <button class="btn-primary" id="generateSchedule">
-            <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
-            </svg>
-            Generate My Schedule
-        </button>
-    </div>
+        
+        {# This button is now redundant since the results are displayed automatically #}
+        {# I recommend removing it or linking it to a Print/Share function if needed. #}
+        </div>
 </div>
 
 {% endblock content %}
 
 {% block extra_js %}
 <script>
-document.getElementById('generateSchedule')?.addEventListener('click', function() {
-    // Add your schedule generation logic here
-    alert('Schedule generation coming soon!');
-});
+// The original generateSchedule button is likely not needed since results are immediate.
+// document.getElementById('generateSchedule')?.addEventListener('click', function() {
+//     alert('Schedule generation coming soon!');
+// });
 </script>
 {% endblock extra_js %}

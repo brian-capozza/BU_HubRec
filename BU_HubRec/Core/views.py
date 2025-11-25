@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+import pprint
 
 # Create your views here.
 
@@ -8,6 +9,8 @@ import random
 
 from formtools.wizard.views import SessionWizardView
 from .forms import Step1Form, Step2Form, Step3Form
+
+from .hub_optimizer import optimize_schedule
 
 def index(request):
     # Get all ClassData IDs
@@ -75,7 +78,6 @@ class MyWizard(SessionWizardView):
             final_data.update(form.cleaned_data)
         
         # Debug: Print the raw data to console
-        import pprint
         print("=" * 50)
         print("FORM DATA RECEIVED:")
         pprint.pprint({k: v for k, v in final_data.items() if 'hub' in k})
@@ -138,9 +140,17 @@ class MyWizard(SessionWizardView):
             'data': final_data,  # Original combined data for debugging
         }
         
-        # Here you would add your optimization algorithm
-        # optimized_schedule = optimize_schedule(context)
-        # context['schedule'] = optimized_schedule
+        # 🛑 CRITICAL DEBUGGING SECTION 🛑
+        optimized_schedule = []
+        try:
+            print("--- VIEWS.PY DEBUG: PRE-CALL TO OPTIMIZE_SCHEDULE ---")
+            optimized_schedule = optimize_schedule(context)
+            print("--- VIEWS.PY DEBUG: POST-CALL FROM OPTIMIZE_SCHEDULE ---")
+        except Exception as e:
+            # THIS MUST PRINT IF THERE IS A CRASH AT THE CALL SITE
+            print(f"!!! VIEWS.PY CRITICAL ERROR: Failed to run optimize_schedule: {e}")
+            
+        context['schedule'] = optimized_schedule
         
         # Render the results page
         return render(self.request, "Core/optimizer_results.html", context)
