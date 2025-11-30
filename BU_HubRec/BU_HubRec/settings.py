@@ -1,5 +1,24 @@
+# settings.py
+
 from pathlib import Path
 import os
+from dotenv import load_dotenv # <-- NEW IMPORT
+
+# ====================================================================
+# API KEY LOADING (START)
+# ====================================================================
+
+# This call finds the .env file in the project root (where manage.py is) 
+# and loads its contents into os.environ.
+load_dotenv() 
+
+# You can optionally set the key as a variable, but the OpenAI client
+# automatically looks for os.environ['OPENAI_API_KEY'].
+
+# ====================================================================
+# API KEY LOADING (END)
+# ====================================================================
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -11,7 +30,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-((9d3!!xq$zdu&q_%vs33e%5f30(x3#h2e#xvol&_cmk)x$$^*'
 
-# SECURITY WARNING: don't run with debug turned on in production!
+# SECURITY WARNING: don't run with debug with on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []

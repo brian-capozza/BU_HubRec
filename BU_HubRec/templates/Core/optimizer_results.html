@@ -92,15 +92,21 @@
                     <ul class="course-list">
                         {% for course in path.courses %}
                             <li class="course-item">
-                                <div class="course-code">{{ course.class_data }}</div>
-                                <div class="course-details">
-                                    <span class="course-name">{{ course.name }}</span>
-                                    <span class="course-credits">({{ course.credits }} cr.)</span>
+                                <div class="course-main-info"> 
+                                    <div class="course-code">{{ course.subject }} {{ course.catalog_number }}</div>
+                                    <div class="course-details">
+                                        <span class="course-name">{{ course.name }}</span>
+                                        <span class="course-credits">({{ course.credits }} cr.)</span>
+                                    </div>
                                 </div>
+                                
                                 <div class="course-hubs">
-                                    {% for hub in course.hubs.all %}
-                                        <span class="hub-tag">{{ hub.unit_name }}</span>
-                                    {% endfor %}
+                                    <span class="hubs-label">Fulfills:</span>
+                                    <div class="hub-tags-wrapper">
+                                        {% for hub_code in course.hubs %} 
+                                            <span class="hub-tag">{{ hub_code }}</span>
+                                        {% endfor %}
+                                    </div>
                                 </div>
                             </li>
                         {% endfor %}
@@ -113,6 +119,7 @@
             </div>
         {% endif %}
     </section>
+    
     {% if selected_hubs %}
     <section class="content-section">
         <div class="section-header">
@@ -199,19 +206,13 @@
             </svg>
             Start Over
         </a>
-        
-        {# This button is now redundant since the results are displayed automatically #}
-        {# I recommend removing it or linking it to a Print/Share function if needed. #}
-        </div>
+    </div>
 </div>
 
 {% endblock content %}
 
 {% block extra_js %}
 <script>
-// The original generateSchedule button is likely not needed since results are immediate.
-// document.getElementById('generateSchedule')?.addEventListener('click', function() {
-//     alert('Schedule generation coming soon!');
-// });
+// Placeholder for any future JavaScript interactions
 </script>
 {% endblock extra_js %}
