@@ -1,8 +1,10 @@
+# Core/forms.py
+
 from django import forms
 from .models import Hub
 
 class Step1Form(forms.Form):
-    """Step 1: Hub Selection"""
+    """Step 1: Hub Selection with counts"""
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -49,47 +51,73 @@ class Step1Form(forms.Form):
         
         return cleaned_data
 
-class Step2Form(forms.Form):
-    """Step 2: Preferences"""
-    
-    credits = forms.IntegerField(
-        label="Number of Credits",
-        min_value=1,
-        max_value=20,
-        initial=4,
-        help_text="How many credits do you need?",
-        widget=forms.NumberInput(attrs={
-            'placeholder': 'e.g., 12'
-        })
-    )
-    
-    num_courses = forms.IntegerField(
-        label="Number of Courses (Optional)",
-        min_value=1,
-        max_value=10,
-        required=False,
-        help_text="Leave blank for the minimum number of courses needed",
-        widget=forms.NumberInput(attrs={
-            'placeholder': 'Leave blank for minimum'
-        })
-    )
-    
-    only_next_semester = forms.BooleanField(
-        label="Only Next Semester",
-        required=False,
-        initial=False,
-        help_text="Only show courses offered next semester"
-    )
 
-class Step3Form(forms.Form):
-    """Step 3: Interests Description"""
+class Step2Form(forms.Form):
+    """Step 2: Credit preferences, max classes, and interests"""
     
+    # Credit checkboxes
+    credits_0 = forms.BooleanField(
+        label='0 Credits',
+        required=False,
+        initial=True,
+    )
+    
+    credits_1 = forms.BooleanField(
+        label='1 Credit',
+        required=False,
+        initial=True,
+    )
+    
+    credits_2 = forms.BooleanField(
+        label='2 Credits',
+        required=False,
+        initial=True,
+    )
+    
+    credits_4 = forms.BooleanField(
+        label='4 Credits',
+        required=False,
+        initial=True,
+    )
+    
+    # Maximum number of classes
+    max_classes = forms.IntegerField(
+        label="Maximum Number of Classes",
+        min_value=1,
+        max_value=7,
+        initial=5,
+        help_text="Between 1 and 7 classes",
+        widget=forms.NumberInput(attrs={
+            'class': 'form-input',
+            'placeholder': 'e.g., 5'
+        })
+    )
+    
+    # Interests description
     interests = forms.CharField(
         label="Tell us about your interests",
         required=False,
         widget=forms.Textarea(attrs={
+            'class': 'form-textarea',
             'placeholder': 'Describe your academic interests, career goals, or topics you\'re passionate about...',
             'rows': 6
         }),
         help_text="This helps us recommend courses that align with your interests"
     )
+    
+    def clean(self):
+        """Ensure at least one credit option is selected"""
+        cleaned_data = super().clean()
+        
+        # Check if at least one credit checkbox is selected
+        credit_options = [
+            cleaned_data.get('credits_0'),
+            cleaned_data.get('credits_1'),
+            cleaned_data.get('credits_2'),
+            cleaned_data.get('credits_4'),
+        ]
+        
+        if not any(credit_options):
+            raise forms.ValidationError("Please select at least one credit option.")
+        
+        return cleaned_data

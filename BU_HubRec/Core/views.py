@@ -8,7 +8,7 @@ from .models import Hub, Course, ClassData
 import random
 
 from formtools.wizard.views import SessionWizardView
-from .forms import Step1Form, Step2Form, Step3Form
+from .forms import Step1Form, Step2Form
 
 from .hub_optimizer import optimize_schedule
 
@@ -57,15 +57,14 @@ def display_course_information(request, college, subject, catalog_number):
         "course": course,
         "class_data": class_data,
     })
-
-
+    
 
 # Optimizer wizard view
 class MyWizard(SessionWizardView):
     """Multi-step form wizard for course optimization"""
     
     template_name = "Core/optimizer_form.html"
-    form_list = [Step1Form, Step2Form, Step3Form]
+    form_list = [Step1Form, Step2Form]
 
     def done(self, form_list, **kwargs):
         """
@@ -78,9 +77,10 @@ class MyWizard(SessionWizardView):
             final_data.update(form.cleaned_data)
         
         # Debug: Print the raw data to console
+        import pprint
         print("=" * 50)
         print("FORM DATA RECEIVED:")
-        pprint.pprint({k: v for k, v in final_data.items() if 'hub' in k})
+        pprint.pprint(final_data)
         print("=" * 50)
         
         # Process Step 1: Hub selections and counts
@@ -92,9 +92,6 @@ class MyWizard(SessionWizardView):
                     count_key = f'{key}_count'
                     count_value = final_data.get(count_key)
                     
-                    # Debug print for each hub
-                    print(f"Processing {hub_code}: checkbox={value}, count_value={count_value}, type={type(count_value)}")
-                    
                     # Handle None, empty string, or invalid counts
                     try:
                         count = int(count_value) if count_value is not None else 1
@@ -102,8 +99,6 @@ class MyWizard(SessionWizardView):
                             count = 1
                     except (ValueError, TypeError):
                         count = 1
-                    
-                    print(f"  -> Final count for {hub_code}: {count}")
                     
                     # Get the Hub object
                     try:
@@ -115,29 +110,43 @@ class MyWizard(SessionWizardView):
                             'count': count
                         })
                     except Hub.DoesNotExist:
-                        print(f"  -> Hub {hub_code} not found!")
                         pass
         
-        print(f"Selected hubs: {selected_hubs}")
-        print("=" * 50)
+        # Process Step 2: Credit preferences
+        selected_credits = []
+        if final_data.get('credits_0'):
+            selected_credits.append(0)
+        if final_data.get('credits_1'):
+            selected_credits.append(1)
+        if final_data.get('credits_2'):
+            selected_credits.append(2)
+        if final_data.get('credits_4'):
+            selected_credits.append(4)
         
-        # Process Step 2: Preferences
-        credits = final_data.get('credits')
-        num_courses = final_data.get('num_courses')  # Can be None
-        only_next_semester = final_data.get('only_next_semester', False)
-        
-        # Process Step 3: Interests
+        max_classes = final_data.get('max_classes')
         interests = final_data.get('interests', '')
+        
+        # Calculate total hub courses needed
+        total_hub_courses = sum(h['count'] for h in selected_hubs)
+        
+        # Validation: Ensure total hub courses <= max_classes
+        validation_error = None
+        if max_classes and total_hub_courses > max_classes:
+            validation_error = (
+                f"The total number of hub courses needed ({total_hub_courses}) exceeds "
+                f"the maximum number of classes ({max_classes}). "
+                f"Please decrease your hub requirements or increase the maximum number of classes."
+            )
         
         # Build context for results page
         context = {
             'selected_hubs': selected_hubs,
-            'total_hub_courses': sum(h['count'] for h in selected_hubs),
-            'credits': credits,
-            'num_courses': num_courses,
-            'only_next_semester': only_next_semester,
+            'total_hub_courses': total_hub_courses,
+            'selected_credits': selected_credits,
+            'max_classes': max_classes,
             'interests': interests,
             'data': final_data,  # Original combined data for debugging
+            'validation_error': validation_error,
         }
         
         # 🛑 CRITICAL DEBUGGING SECTION 🛑
@@ -173,7 +182,5 @@ class MyWizard(SessionWizardView):
             context['step_title'] = 'Select Hub Requirements'
         elif self.steps.current == '1':
             context['step_title'] = 'Set Your Preferences'
-        elif self.steps.current == '2':
-            context['step_title'] = 'Share Your Interests'
         
         return context

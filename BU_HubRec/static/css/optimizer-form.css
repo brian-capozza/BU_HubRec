@@ -41,14 +41,14 @@
     background: rgba(189, 14, 2, 0.1);
     border-radius: 10px;
     overflow: hidden;
-    margin-top: 2rem;
+    margin-bottom: 2rem;
 }
 
 .progress-fill {
     height: 100%;
     background: linear-gradient(90deg, #bd0e02, #ff2314);
     border-radius: 10px;
-    width: calc((var(--progress) / 3) * 100%);
+    width: calc((var(--progress) / var(--total, 2)) * 100%);
     transition: width 0.5s ease;
 }
 
@@ -274,6 +274,13 @@
     border: 2px solid rgba(189, 14, 2, 0.15);
     border-radius: 12px;
     padding: 1rem;
+    margin-top: 0.5rem;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.hub-count-wrapper.active {
+    display: block;
     animation: slideDown 0.3s ease-out;
 }
 
@@ -288,19 +295,14 @@
     }
 }
 
-.hub-checkbox-input:checked ~ .hub-count-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
 .count-label {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     font-weight: 600;
     color: #bd0e02;
+    margin-bottom: 0.5rem;
 }
 
 .count-label svg {
@@ -330,7 +332,107 @@
 .preferences-form {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 2.5rem;
+}
+
+.form-section {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, rgba(189, 14, 2, 0.03), rgba(189, 14, 2, 0.01));
+    border-radius: 12px;
+    border: 2px solid rgba(189, 14, 2, 0.1);
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 0.5rem;
+}
+
+.section-title svg {
+    width: 22px;
+    height: 22px;
+    stroke: #bd0e02;
+}
+
+.section-description {
+    font-size: 0.9rem;
+    color: #656565;
+    margin-bottom: 1.5rem;
+}
+
+/* Credit Checkboxes */
+.credit-checkboxes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 0.75rem;
+}
+
+.credit-checkbox-wrapper {
+    position: relative;
+}
+
+.credit-checkbox-wrapper input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.credit-checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 0.9rem;
+    background: white;
+    border: 2px solid rgba(189, 14, 2, 0.15);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.credit-checkbox-label:hover {
+    background: rgba(189, 14, 2, 0.05);
+    border-color: rgba(189, 14, 2, 0.3);
+}
+
+.credit-checkbox-wrapper input[type="checkbox"]:checked + .credit-checkbox-label {
+    background: linear-gradient(135deg, #bd0e02, #ff2314);
+    border-color: #bd0e02;
+    color: white;
+    box-shadow: 0 2px 10px rgba(189, 14, 2, 0.2);
+}
+
+.credit-checkbox-icon {
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(189, 14, 2, 0.3);
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+}
+
+.credit-checkbox-wrapper input[type="checkbox"]:checked + .credit-checkbox-label .credit-checkbox-icon {
+    background: white;
+    border-color: white;
+}
+
+.credit-checkbox-icon svg {
+    width: 14px;
+    height: 14px;
+    stroke: transparent;
+    transition: stroke 0.3s ease;
+}
+
+.credit-checkbox-wrapper input[type="checkbox"]:checked + .credit-checkbox-label .credit-checkbox-icon svg {
+    stroke: #bd0e02;
 }
 
 .form-group {

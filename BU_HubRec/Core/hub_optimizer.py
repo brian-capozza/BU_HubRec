@@ -308,9 +308,28 @@ def optimize_schedule(context: Dict[str, Any], num_paths: int = 6, max_iteration
 
     # 1. Load all courses from the database efficiently
     try:
-        all_courses = list(
-            Course.objects.all().select_related('class_data') 
+        selected_hubs = [h['hub'] for h in context.get('selected_hubs', [])]
+        selected_credits = context['selected_credits']
+
+        all_courses = (
+            Course.objects.filter(offered_next_semester=True)
+            .filter(hubs__in=selected_hubs) if selected_hubs else Course.objects.filter(offered_next_semester=True)
         )
+
+        # Apply credit filter
+        if selected_credits:
+            all_courses = all_courses.filter(credits__in=selected_credits)
+
+        # Add DB performance optimizations
+        all_courses = (
+            all_courses
+            .select_related("class_data")
+            .prefetch_related("hubs", "offered", "professor")
+            .distinct()
+        )
+
+        # Convert to list, like your original code
+        all_courses = list(all_courses)
     except Exception as e:
         print(f"CRITICAL ERROR: Failed to fetch all courses: {e}")
         return []
